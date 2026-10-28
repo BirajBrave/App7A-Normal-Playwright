@@ -56,3 +56,40 @@ test("User Register Successfully", async({page})=>{
 
     await expect(page).toHaveURL("https://www.playwrightautomation.com/register.html");
 }); 
+
+//Login 
+test("User Login Successfully", async({ page })=>{
+
+    await page.goto("https://www.playwrightautomation.com/");
+    await page.getByTestId("pw-header-login").click();
+
+    await expect(page).toHaveURL("https://www.playwrightautomation.com/login.html");
+
+    await expect(page.getByTestId("login-heading")).toHaveText("Sign in");
+
+    await expect(page.getByTestId("login-username-input")).toBeVisible();
+    await expect(page.getByTestId("login-password-input")).toBeVisible();
+    await expect(page.getByTestId("login-remember-checkbox")).toBeVisible();
+    await expect(page.getByTestId("login-submit-button")).toBeVisible();
+
+    const email = page.getByTestId("login-username-input");
+    const password = page.getByTestId("login-password-input");
+
+    await email.fill("student");
+    await password.fill("Password123");
+
+    await page.getByTestId("login-remember-checkbox").check();
+    await expect(page.getByTestId("login-remember-checkbox")).toBeChecked();
+
+    await page.getByTestId("login-submit-button").click();
+
+    await expect(page).toHaveURL("https://www.playwrightautomation.com/");
+
+    await expect(page.getByText("student", {exact: true})).toBeVisible();
+
+    await page.locator('[data-dropdown="pw-account-menu"]').click();
+
+    await page.getByRole("button", {name: "Log out", exact: true}).click();
+    await expect(page).toHaveURL("https://www.playwrightautomation.com/");
+})
+
